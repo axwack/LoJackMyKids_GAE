@@ -9,7 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -58,12 +60,16 @@ public class SendMessageHttpServlet extends BaseServlet {
 		String lat = req.getParameter("lat");
 		String lng = req.getParameter("lng");
 		AP_KEY = req.getParameter("API_KEY");
-		
+
 		ArrayList<String> registration_ids = new ArrayList<String>();
+		Map<String, Double> points = new HashMap<String,Double>();
 		registration_ids.add(reg_ids);
 		
-		GPSPosition gpsPosition = new GPSPosition(Double.parseDouble(lat),
-				Double.parseDouble(lng), registration_ids);
+		points.put("lat", Double.parseDouble(lat));
+		points.put("lng", Double.parseDouble(lng));
+
+		GSONObject gpsPosition = new GSONObject(registration_ids, points);
+
 		Gson gson = new Gson();
 
 		String json = gson.toJson(gpsPosition);
@@ -71,7 +77,8 @@ public class SendMessageHttpServlet extends BaseServlet {
 		if (reg_ids != "") {
 			resp.setStatus(HttpServletResponse.SC_OK);
 		} else {
-			resp.sendError(HttpServletResponse.SC_NOT_FOUND, "No Registration ID's");
+			resp.sendError(HttpServletResponse.SC_NOT_FOUND,
+					"No Registration ID's");
 		}
 
 		Enumeration<String> requestParameters = req.getParameterNames();
@@ -80,7 +87,23 @@ public class SendMessageHttpServlet extends BaseServlet {
 			log.warning("Request Parameter Name: " + paramName + ", Value - "
 					+ req.getParameter(paramName));
 		}
-		sendNotificationRequestToGcm(json);
+
+		com.google.appengine.api.urlfetch.HTTPResponse gcmResponse = sendNotificationRequestToGcm(json);
+
+		if (gcmResponse.getResponseCode() == 400) {
+			resp.sendError(
+					HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+					"Only applies for JSON requests. "
+							+ "Indicates that the request could not be parsed as JSON, or it contained invalid fields "
+							+ "(for instance, passing a string where a number was expected). "
+							+ "The exact failure reason is described in the response and the problem should be "
+							+ "addressed before the request can be retried."
+							+ "HTTP RESPONSE: "
+							+ new String(gcmResponse.getContent()));
+		} else {
+			resp.setStatus(HttpServletResponse.SC_OK, "Received from GCM.");
+		}
+
 		/*
 		 * Enumeration<String> requestAttributes = req.getAttributeNames();
 		 * while (requestAttributes.hasMoreElements()) { String attributeName =
@@ -111,13 +134,13 @@ public class SendMessageHttpServlet extends BaseServlet {
 
 	}
 
-	private void sendNotificationRequestToGcm(String json) {
+	private com.google.appengine.api.urlfetch.HTTPResponse sendNotificationRequestToGcm(
+			String json) {
 		log.warning("In sendNotificationRequestToGcm method!");
-
 
 		log.warning("JSON payload: " + json);
 
-		com.google.appengine.api.urlfetch.HTTPResponse response;
+		com.google.appengine.api.urlfetch.HTTPResponse response = null;
 		URL url;
 		HTTPRequest httpRequest;
 
@@ -125,12 +148,15 @@ public class SendMessageHttpServlet extends BaseServlet {
 			// GCM_URL = https://android.googleapis.com/gcm/send
 			url = new URL(GCMEndpoint);
 			httpRequest = new HTTPRequest(url, HTTPMethod.POST);
-			httpRequest.addHeader(new HTTPHeader("Content-Type","application/json"));
-			httpRequest.addHeader(new HTTPHeader("Authorization", "key="+ AP_KEY));
+			httpRequest.addHeader(new HTTPHeader("Content-Type",
+					"application/json"));
+			httpRequest.addHeader(new HTTPHeader("Authorization", "key="
+					+ AP_KEY));
 			httpRequest.setPayload(json.getBytes("UTF-8"));
 			log.warning("Sending POST request to: " + GCMEndpoint);
 
-			response = URLFetchServiceFactory.getURLFetchService().fetch(httpRequest);
+			response = URLFetchServiceFactory.getURLFetchService().fetch(
+					httpRequest);
 
 			log.warning("Status: " + response.getResponseCode());
 
@@ -141,8 +167,6 @@ public class SendMessageHttpServlet extends BaseServlet {
 				log.warning("Value:  " + header.getValue());
 			}
 
-			log.warning(response.getContent().toString());
-
 		} catch (UnsupportedEncodingException e1) {
 			log.severe("UnsupportedEncodingException" + e1.getMessage());
 		} catch (MalformedURLException e1) {
@@ -150,5 +174,6 @@ public class SendMessageHttpServlet extends BaseServlet {
 		} catch (IOException e) {
 			log.severe("URLFETCH IOException" + e.getMessage());
 		}
+		return response;
 	}
 }
