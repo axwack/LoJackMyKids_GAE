@@ -25,7 +25,7 @@ import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +38,8 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class SendAllMessagesServlet extends BaseServlet {
 
+	private static final Logger log = Logger.getLogger(SendAllMessagesServlet.class.getName());
+	 
 	/**
 	 * Processes the request to add a new message.
 	 */
@@ -49,7 +51,7 @@ public class SendAllMessagesServlet extends BaseServlet {
 		if (devices.isEmpty()) {
 			status = "Message ignored as there is no device registered!";
 		} else {
-			
+			log.warning("Req: "+req.getParameter("registration_ids"));
 			//Queue queue = QueueFactory.getQueue("gcm");
 			Queue queue = QueueFactory.getDefaultQueue();
 			

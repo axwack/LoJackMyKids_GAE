@@ -77,7 +77,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>SendMessageServlet</servlet-name>
     <url-pattern>/send</url-pattern>
   </servlet-mapping>
+ <servlet>
+    <servlet-name>SendMessageHttpServlet</servlet-name>
+    <servlet-class>
+      com.google.android.gcm.demo.server.SendMessageHttpServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
+  <servlet-mapping>
+    <servlet-name>SendMessageHttpServlet</servlet-name>
+    <url-pattern>/sendHttp</url-pattern>
+  </servlet-mapping>
   <servlet>
     <servlet-name>HomeServlet</servlet-name>
     <servlet-class>

@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +48,8 @@ public class SendMessageServlet extends BaseServlet {
 
 	private Sender sender;
 
+	private static final Logger log = Logger.getLogger(SendMessageServlet.class.getName());
+	
 	@Override 
 	public void init(ServletConfig config) throws ServletException { 
 		super.init(config); 
@@ -84,6 +86,9 @@ public class SendMessageServlet extends BaseServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+		
+		log.warning("[SERVLET] Req:" + req.getParameter("registration_ids"));
+		
 		if (req.getHeader(HEADER_QUEUE_NAME) == null) {
 			throw new IOException("Missing header " + HEADER_QUEUE_NAME);
 		}
@@ -99,7 +104,7 @@ public class SendMessageServlet extends BaseServlet {
 			}
 		}
 		String regId = req.getParameter(PARAMETER_DEVICE);
-		logger.info("[REQ] regID =" + regId);
+		log.warning("[REQ] regID =" + regId);
 		
 		if (regId != null) {
 			sendSingleMessage(regId, resp);
