@@ -94,10 +94,6 @@ public class SendMessageHttpServlet extends BaseServlet {
 			resp.sendError(
 					HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					"Only applies for JSON requests. "
-							+ "Indicates that the request could not be parsed as JSON, or it contained invalid fields "
-							+ "(for instance, passing a string where a number was expected). "
-							+ "The exact failure reason is described in the response and the problem should be "
-							+ "addressed before the request can be retried."
 							+ "HTTP RESPONSE: "
 							+ new String(gcmResponse.getContent()));
 		} else {

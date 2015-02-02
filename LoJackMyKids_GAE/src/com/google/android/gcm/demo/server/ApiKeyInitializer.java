@@ -35,7 +35,7 @@ public class ApiKeyInitializer implements ServletContextListener {
   static final String ATTRIBUTE_ACCESS_KEY = "AIzaSyAjYdpOzQcDqIWtHn1zzRvJipSi5L2c5eY";
 
   private static final String ENTITY_KIND = "Settings";
-  private static final String ENTITY_KEY = "MyKey";
+  private static final String ENTITY_KEY = "REGID";
   private static final String ACCESS_KEY_FIELD = "AIzaSyAjYdpOzQcDqIWtHn1zzRvJipSi5L2c5eY";
 
   private final Logger logger = Logger.getLogger(getClass().getName());
