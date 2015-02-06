@@ -18,6 +18,7 @@ package com.google.android.gcm.demo.server;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,29 +35,46 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class RegisterServlet extends BaseServlet {
 
-  private static final String PARAMETER_REG_ID = "regId";
+	private static final String PARAMETER_REG_ID = "regId";
+	private static final String PARAMETER_EMAIL = "email";
 	private static final Logger log = Logger.getLogger(SendMessageServlet.class
 			.getName());
-	
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException {
-	  
-	log.warning("[REGISTER SERVLET] Req:" + req.toString());
-    String regId = getParameter(req, PARAMETER_REG_ID);
-    Datastore.register(regId);
-    
-    Enumeration<String> requestParameters = req.getParameterNames();
-	
-    while (requestParameters.hasMoreElements()) {
-		String paramName = requestParameters.nextElement();
-		log.warning("Request Parameter Name: " + paramName + ", Value - "
-				+ req.getParameter(paramName));
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException {
+
+		log.warning("[REGISTER SERVLET] Req:" + req.toString());
+		String regId = getParameter(req, PARAMETER_REG_ID);
+		String email = getParameter(req, PARAMETER_EMAIL);
+
+		EntityManager emf = EMF.get().createEntityManager();
+
+		try {
+			Contact contact = Contact.find(email, emf);
+			if (contact == null) {
+				contact = new Contact(email, regId);
+			} else {
+				contact.setRegId(regId);
+			}
+			emf.persist(contact);
+
+		} finally {
+			emf.close();
+		}
+
+		// Datastore.register(regId); older way so we need to see if the new
+		// stores the regid
+
+		Enumeration<String> requestParameters = req.getParameterNames();
+
+		while (requestParameters.hasMoreElements()) {
+			String paramName = requestParameters.nextElement();
+			log.warning("Request Parameter Name: " + paramName + ", Value - "
+					+ req.getParameter(paramName));
+		}
+
+		setSuccess(resp);
 	}
-    
-    setSuccess(resp);
-  }
-  
-  
 
 }
