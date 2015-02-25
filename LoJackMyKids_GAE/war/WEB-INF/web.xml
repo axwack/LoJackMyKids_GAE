@@ -84,19 +84,29 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>SendMessageHttpServlet</servlet-name>
     <url-pattern>/sendHttp</url-pattern>
   </servlet-mapping>
+
   <servlet>
+     <servlet-name>LookupUserServlet</servlet-name> 
+    <servlet-class>
+      com.google.android.gcm.demo.server.LookupUserServlet
+    </servlet-class>   
+  </servlet>
+  <servlet-mapping>
+     <servlet-name>LookupUserServlet</servlet-name>
+    <url-pattern>/lookupUser</url-pattern>
+  </servlet-mapping>
+  
+<servlet>
     <servlet-name>HomeServlet</servlet-name>
     <servlet-class>
       com.google.android.gcm.demo.server.HomeServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>HomeServlet</servlet-name>
     <url-pattern>/home</url-pattern>
@@ -104,5 +114,13 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <!--  <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>  -->
-    
+    <filter>
+    <filter-name>datastoreFilter</filter-name>
+    <filter-class>org.slim3.datastore.DatastoreFilter</filter-class>
+</filter>
+<filter-mapping>
+        <filter-name>datastoreFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+</filter-mapping>
 </web-app>

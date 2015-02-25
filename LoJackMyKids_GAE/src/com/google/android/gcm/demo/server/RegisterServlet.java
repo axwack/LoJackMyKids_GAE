@@ -18,10 +18,15 @@ package com.google.android.gcm.demo.server;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slim3.datastore.Datastore;
+
+import com.google.appengine.api.datastore.Key;
+import com.principalmvl.lojackmykids.meta.ContactMeta;
+import com.principalmvl.lojackmykids.model.Contact;
 
 /**
  * Servlet that registers a device, whose registration id is identified by
@@ -48,33 +53,36 @@ public class RegisterServlet extends BaseServlet {
 		String regId = getParameter(req, PARAMETER_REG_ID);
 		String email = getParameter(req, PARAMETER_EMAIL);
 
-		EntityManager emf = EMF.get().createEntityManager();
+		// EntityManager emf = EMF.get().createEntityManager();
 
 		try {
-			Contact contact = Contact.find(email, emf);
+
+			ContactMeta c = new ContactMeta();
+			Contact contact = Datastore.query(c).filter(c.email.equal(email))
+					.asSingle();
+
 			if (contact == null) {
+				Key key = Datastore.createKey(Contact.class, email);
 				contact = new Contact(email, regId);
+				contact.setKey(key);
 			} else {
 				contact.setRegId(regId);
 			}
-			emf.persist(contact);
-
+			Datastore.put(c);
 		} finally {
-			emf.close();
+			// Datastore.register(regId); older way so we need to see if the new
+			// stores the regid
+
+			Enumeration<String> requestParameters = req.getParameterNames();
+
+			while (requestParameters.hasMoreElements()) {
+				String paramName = requestParameters.nextElement();
+				log.warning("Request Parameter Name: " + paramName
+						+ ", Value - " + req.getParameter(paramName));
+			}
+
+			setSuccess(resp);
 		}
-
-		// Datastore.register(regId); older way so we need to see if the new
-		// stores the regid
-
-		Enumeration<String> requestParameters = req.getParameterNames();
-
-		while (requestParameters.hasMoreElements()) {
-			String paramName = requestParameters.nextElement();
-			log.warning("Request Parameter Name: " + paramName + ", Value - "
-					+ req.getParameter(paramName));
-		}
-
-		setSuccess(resp);
 	}
 
 }

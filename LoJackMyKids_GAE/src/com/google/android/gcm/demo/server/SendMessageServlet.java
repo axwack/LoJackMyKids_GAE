@@ -94,11 +94,11 @@ public class SendMessageServlet extends BaseServlet {
 		}
 		
 		String retryCountHeader = req.getHeader(HEADER_QUEUE_COUNT);
-		logger.fine("retry count: " + retryCountHeader);
+		log.fine("retry count: " + retryCountHeader);
 		if (retryCountHeader != null) {
 			int retryCount = Integer.parseInt(retryCountHeader);
 			if (retryCount > MAX_RETRY) {
-				logger.severe("Too many retries, dropping task");
+				log.severe("Too many retries, dropping task");
 				taskDone(resp);
 				return;
 			}
@@ -115,7 +115,7 @@ public class SendMessageServlet extends BaseServlet {
 			sendMulticastMessage(multicastKey, resp);
 			return;
 		}
-		logger.severe("Invalid request!");
+		log.severe("Invalid request!");
 		taskDone(resp);
 		return;
 	}
@@ -126,13 +126,13 @@ public class SendMessageServlet extends BaseServlet {
 	}
 
 	private void sendSingleMessage(String regId, HttpServletResponse resp) {
-		logger.info("Sending message to device " + regId);
+		log.info("Sending message to device " + regId);
 		Message message = createMessage();
 		Result result;
 		try {
 			result = sender.sendNoRetry(message, regId);
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, "Exception posting " + message, e);
+			log.log(Level.SEVERE, "Exception posting " + message, e);
 			taskDone(resp);
 			return;
 		}
@@ -141,11 +141,11 @@ public class SendMessageServlet extends BaseServlet {
 			return;
 		}
 		if (result.getMessageId() != null) {
-			logger.info("Succesfully sent message to device " + regId);
+			log.info("Succesfully sent message to device " + regId);
 			String canonicalRegId = result.getCanonicalRegistrationId();
 			if (canonicalRegId != null) {
 				// same device has more than on registration id: update it
-				logger.finest("canonicalRegId " + canonicalRegId);
+				log.finest("canonicalRegId " + canonicalRegId);
 				Datastore.updateRegistration(regId, canonicalRegId);
 			}
 		} else {
@@ -154,7 +154,7 @@ public class SendMessageServlet extends BaseServlet {
 				// application has been removed from device - unregister it
 				Datastore.unregister(regId);
 			} else {
-				logger.severe("Error sending message to device " + regId + ": "
+				log.severe("Error sending message to device " + regId + ": "
 						+ error);
 			}
 		}
@@ -169,7 +169,7 @@ public class SendMessageServlet extends BaseServlet {
 		try {
 			multicastResult = sender.sendNoRetry(message, regIds);
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, "Exception posting " + message, e);
+			log.log(Level.SEVERE, "Exception posting " + message, e);
 			multicastDone(resp, multicastKey);
 			return;
 		}
@@ -194,7 +194,7 @@ public class SendMessageServlet extends BaseServlet {
 				String error = results.get(i).getErrorCodeName();
 				if (error != null) {
 					String regId = regIds.get(i);
-					logger.warning("Got error (" + error + ") for regId "
+					log.warning("Got error (" + error + ") for regId "
 							+ regId);
 					if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
 						// application has been removed from device - unregister
