@@ -58,6 +58,7 @@ public class RegisterServlet extends BaseServlet {
 		try {
 
 			ContactMeta c = new ContactMeta();
+
 			Contact contact = Datastore.query(c).filter(c.email.equal(email))
 					.asSingle();
 
@@ -68,7 +69,7 @@ public class RegisterServlet extends BaseServlet {
 			} else {
 				contact.setRegId(regId);
 			}
-			Datastore.put(c);
+			Datastore.put(contact);
 		} finally {
 			// Datastore.register(regId); older way so we need to see if the new
 			// stores the regid
