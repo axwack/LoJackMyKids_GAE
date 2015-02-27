@@ -1,6 +1,7 @@
 package com.principalmvl.lojackmykids.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,7 +23,16 @@ public class Contact implements Serializable {
 	private long id;
 	private String email;
 	private String regId;
+	private Date createDate;
 	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
 	@Attribute(primaryKey = true)
     private Key key;
 	

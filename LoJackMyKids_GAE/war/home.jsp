@@ -5,7 +5,7 @@
 <%-- use the 'taglib' directive to make the JSTL 1.0 core tags available; use the uri "http://java.sun.com/jsp/jstl/core" for JSTL 1.1 --%>
 <%@ page import="javax.servlet.http.HttpServletRequest"%>
 <%@ page import="javax.servlet.http.HttpServletResponse"%>
-<%@ page import="com.google.android.gcm.demo.server.Datastore"%>
+<%@ page import="com.principalmvl.lojackmykids.server.Datastore"%>
 
 
 <html>
