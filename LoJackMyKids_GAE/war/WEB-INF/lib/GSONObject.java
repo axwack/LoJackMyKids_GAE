@@ -1,4 +1,4 @@
-package com.google.android.gcm.demo.server;
+package com.principalmvl.lojackmykids.server;
 
 import java.util.ArrayList;
 import java.util.List;

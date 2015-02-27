@@ -22,14 +22,14 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <listener>
     <listener-class>
-      com.google.android.gcm.demo.server.ApiKeyInitializer
+      com.principalmvl.lojackmykids.server.ApiKeyInitializer
     </listener-class>
   </listener>
 
   <servlet>
     <servlet-name>RegisterServlet</servlet-name>
     <servlet-class>
-      com.google.android.gcm.demo.server.RegisterServlet
+      com.principalmvl.lojackmykids.server.RegisterServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -42,7 +42,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
     <servlet-name>UnregisterServlet</servlet-name>
     <servlet-class>
-      com.google.android.gcm.demo.server.UnregisterServlet
+      com.principalmvl.lojackmykids.server.UnregisterServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -55,7 +55,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
     <servlet-name>SendAllMessagesServlet</servlet-name>
     <servlet-class>
-      com.google.android.gcm.demo.server.SendAllMessagesServlet
+      com.principalmvl.lojackmykids.server.SendAllMessagesServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -68,7 +68,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
     <servlet-name>SendMessageServlet</servlet-name>
     <servlet-class>
-      com.google.android.gcm.demo.server.SendMessageServlet
+      com.principalmvl.lojackmykids.server.SendMessageServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -80,7 +80,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
  <servlet>
     <servlet-name>SendMessageHttpServlet</servlet-name>
     <servlet-class>
-      com.google.android.gcm.demo.server.SendMessageHttpServlet
+      com.principalmvl.lojackmykids.server.SendMessageHttpServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -92,7 +92,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet>
      <servlet-name>LookupUserServlet</servlet-name> 
     <servlet-class>
-      com.google.android.gcm.demo.server.LookupUserServlet
+      com.principalmvl.lojackmykids.server.LookupUserServlet
     </servlet-class>   
   </servlet>
   <servlet-mapping>
@@ -103,7 +103,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 <servlet>
     <servlet-name>HomeServlet</servlet-name>
     <servlet-class>
-      com.google.android.gcm.demo.server.HomeServlet
+      com.principalmvl.lojackmykids.server.HomeServlet
     </servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>

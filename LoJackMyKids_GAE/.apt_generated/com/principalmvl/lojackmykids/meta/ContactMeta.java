@@ -1,11 +1,8 @@
 package com.principalmvl.lojackmykids.meta;
 
-//@javax.annotation.Generated(value = { "slim3-gen", "@VERSION@" }, date = "2015-02-27 12:27:02")
+//@javax.annotation.Generated(value = { "slim3-gen", "@VERSION@" }, date = "2015-02-26 18:28:21")
 /** */
 public final class ContactMeta extends org.slim3.datastore.ModelMeta<com.principalmvl.lojackmykids.model.Contact> {
-
-    /** */
-    public final org.slim3.datastore.CoreAttributeMeta<com.principalmvl.lojackmykids.model.Contact, java.util.Date> createDate = new org.slim3.datastore.CoreAttributeMeta<com.principalmvl.lojackmykids.model.Contact, java.util.Date>(this, "createDate", "createDate", java.util.Date.class);
 
     /** */
     public final org.slim3.datastore.StringAttributeMeta<com.principalmvl.lojackmykids.model.Contact> email = new org.slim3.datastore.StringAttributeMeta<com.principalmvl.lojackmykids.model.Contact>(this, "email", "email");
@@ -36,7 +33,6 @@ public final class ContactMeta extends org.slim3.datastore.ModelMeta<com.princip
     @Override
     public com.principalmvl.lojackmykids.model.Contact entityToModel(com.google.appengine.api.datastore.Entity entity) {
         com.principalmvl.lojackmykids.model.Contact model = new com.principalmvl.lojackmykids.model.Contact();
-        model.setCreateDate((java.util.Date) entity.getProperty("createDate"));
         model.setEmail((java.lang.String) entity.getProperty("email"));
         model.setId(longToPrimitiveLong((java.lang.Long) entity.getProperty("id")));
         model.setKey(entity.getKey());
@@ -53,7 +49,6 @@ public final class ContactMeta extends org.slim3.datastore.ModelMeta<com.princip
         } else {
             entity = new com.google.appengine.api.datastore.Entity(kind);
         }
-        entity.setProperty("createDate", m.getCreateDate());
         entity.setProperty("email", m.getEmail());
         entity.setProperty("id", m.getId());
         entity.setProperty("regId", m.getRegId());
@@ -114,10 +109,6 @@ public final class ContactMeta extends org.slim3.datastore.ModelMeta<com.princip
         com.principalmvl.lojackmykids.model.Contact m = (com.principalmvl.lojackmykids.model.Contact) model;
         writer.beginObject();
         org.slim3.datastore.json.Default encoder0 = new org.slim3.datastore.json.Default();
-        if(m.getCreateDate() != null){
-            writer.setNextPropertyName("createDate");
-            encoder0.encode(writer, m.getCreateDate());
-        }
         if(m.getEmail() != null){
             writer.setNextPropertyName("email");
             encoder0.encode(writer, m.getEmail());
@@ -140,8 +131,6 @@ public final class ContactMeta extends org.slim3.datastore.ModelMeta<com.princip
         com.principalmvl.lojackmykids.model.Contact m = new com.principalmvl.lojackmykids.model.Contact();
         org.slim3.datastore.json.JsonReader reader = null;
         org.slim3.datastore.json.Default decoder0 = new org.slim3.datastore.json.Default();
-        reader = rootReader.newObjectReader("createDate");
-        m.setCreateDate(decoder0.decode(reader, m.getCreateDate()));
         reader = rootReader.newObjectReader("email");
         m.setEmail(decoder0.decode(reader, m.getEmail()));
         reader = rootReader.newObjectReader("id");
