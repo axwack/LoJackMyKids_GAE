@@ -20,11 +20,19 @@ public class Contact implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long id;
 	private String email;
 	private String regId;
 	private Date createDate;
+	private Date lastUpdateDate;
 	
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -46,12 +54,6 @@ public class Contact implements Serializable {
 
 	public Contact(){}
 
-	public Contact (String email, String regId){
-		this.email = email;
-		this.regId = regId;
-	}
-	
-
 	public static Contact find(String email, EntityManager em){
 		javax.persistence.Query q = em.createQuery("Select c from Contact c where c.email = :email");
 		q.setParameter("email", email);
@@ -62,18 +64,9 @@ public class Contact implements Serializable {
 		}
 		return null;
 	}
-	
 
 	public static Contact get(Key key){
 		return Datastore.get(Contact.class, key);
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getEmail() {
@@ -90,5 +83,10 @@ public class Contact implements Serializable {
 
 	public void setRegId(String regId) {
 		this.regId = regId;
+	}
+	
+	public String toString(){
+		return "Contact {Email: "+ getEmail() + " RegID: " + getRegId() + "Key: " +getKey() + "Last Update Date: " + getLastUpdateDate()+
+				" Create Date: " + getCreateDate()+" }";
 	}
 }

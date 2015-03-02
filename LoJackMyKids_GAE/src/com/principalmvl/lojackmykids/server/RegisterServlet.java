@@ -17,7 +17,6 @@ package com.principalmvl.lojackmykids.server;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
@@ -46,8 +45,9 @@ public class RegisterServlet extends BaseServlet {
 	private static final String PARAMETER_REG_ID = "regId";
 	private static final String PARAMETER_EMAIL = "email";
 	private static final String PARAMETER_CREATEDATE = "createDate";
-	private static final Logger log = Logger.getLogger(SendMessageServlet.class
+	private static final Logger log = Logger.getLogger(RegisterServlet.class
 			.getName());
+	private Contact contact;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -60,43 +60,66 @@ public class RegisterServlet extends BaseServlet {
 
 		// EntityManager emf = EMF.get().createEntityManager();
 
-		try {
+		contact = searchContact(email);
+		log.warning("Search Contact: " + contact.toString());
+		
+		contact = createContact(regId, email, createDate);
+		log.warning("Create Contact: " + contact.toString());
+		
+		Datastore.put(contact);
 
-			ContactMeta c = new ContactMeta();
+		// Datastore.register(regId); older way so we need to see if the new
+		// stores the regid
+
+		Enumeration<String> requestParameters = req.getParameterNames();
+
+		while (requestParameters.hasMoreElements()) {
+			String paramName = requestParameters.nextElement();
+			log.warning("Request Parameter Name: " + paramName + ", Value - "
+					+ req.getParameter(paramName));
+		}
+
+		setSuccess(resp);
+
+	}
+
+	private Contact createContact(String regId, String email, String createDate) {
+		try {
+			
 
 			SimpleDateFormat formatter = new SimpleDateFormat(
 					"EEEE, MMM dd, yyyy HH:mm:ss a");
 
-			Contact contact = Datastore.query(c).filter(c.email.equal(email))
-					.asSingle();
-
 			if (contact == null) {
-
 				Key key = Datastore.createKey(Contact.class, email);
-				contact = new Contact(email, regId);
 				contact.setKey(key);
+				contact.setEmail(email);
+				contact.setRegId(regId);
 				contact.setCreateDate(formatter.parse(createDate));
 
 			} else {
 				contact.setRegId(regId);
+				contact.setEmail(email);
+				contact.setLastUpdateDate(formatter.parse(createDate));
 			}
-			Datastore.put(contact);
-		} catch (ParseException p) {
-
-		} finally {
-			// Datastore.register(regId); older way so we need to see if the new
-			// stores the regid
-
-			Enumeration<String> requestParameters = req.getParameterNames();
-
-			while (requestParameters.hasMoreElements()) {
-				String paramName = requestParameters.nextElement();
-				log.warning("Request Parameter Name: " + paramName
-						+ ", Value - " + req.getParameter(paramName));
-			}
-
-			setSuccess(resp);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		return contact;
 	}
 
+	private Contact searchContact(String email) {
+
+		ContactMeta c = new ContactMeta();
+
+		contact = Datastore.query(c).filter(c.email.equal(email)).asSingle();
+
+		if (contact == null) {
+			contact = new Contact();
+		}
+
+		return contact;
+	}
 }

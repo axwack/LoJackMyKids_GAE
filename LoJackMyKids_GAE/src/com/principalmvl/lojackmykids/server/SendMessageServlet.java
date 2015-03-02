@@ -48,14 +48,16 @@ public class SendMessageServlet extends BaseServlet {
 
 	private Sender sender;
 
-	private static final Logger log = Logger.getLogger(SendMessageServlet.class.getName());
-	
-	@Override 
-	public void init(ServletConfig config) throws ServletException { 
-		super.init(config); 
-		//sender = newSender(config); 
-		sender = new Sender(ApiKeyInitializer.ATTRIBUTE_ACCESS_KEY); 
-		} /** * Creates the {@link Sender} based on the servlet settings. */ 
+	private static final Logger log = Logger.getLogger(SendMessageServlet.class
+			.getName());
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		sender = new Sender(ApiKeyInitializer.ATTRIBUTE_ACCESS_KEY);
+	}
+
+	/** * Creates the {@link Sender} based on the servlet settings. */
 
 	/**
 	 * Creates the {@link Sender} based on the servlet settings.
@@ -86,13 +88,13 @@ public class SendMessageServlet extends BaseServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		
+
 		log.warning("[SERVLET] Req:" + req.getParameter("registration_ids"));
-		
+
 		if (req.getHeader(HEADER_QUEUE_NAME) == null) {
 			throw new IOException("Missing header " + HEADER_QUEUE_NAME);
 		}
-		
+
 		String retryCountHeader = req.getHeader(HEADER_QUEUE_COUNT);
 		log.fine("retry count: " + retryCountHeader);
 		if (retryCountHeader != null) {
@@ -105,7 +107,7 @@ public class SendMessageServlet extends BaseServlet {
 		}
 		String regId = req.getParameter(PARAMETER_DEVICE);
 		log.warning("[REQ] regID =" + regId);
-		
+
 		if (regId != null) {
 			sendSingleMessage(regId, resp);
 			return;
@@ -194,8 +196,7 @@ public class SendMessageServlet extends BaseServlet {
 				String error = results.get(i).getErrorCodeName();
 				if (error != null) {
 					String regId = regIds.get(i);
-					log.warning("Got error (" + error + ") for regId "
-							+ regId);
+					log.warning("Got error (" + error + ") for regId " + regId);
 					if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
 						// application has been removed from device - unregister
 						// it

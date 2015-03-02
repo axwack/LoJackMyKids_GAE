@@ -20,11 +20,11 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-  <listener>
+ <!--  <listener>
     <listener-class>
       com.principalmvl.lojackmykids.server.ApiKeyInitializer
     </listener-class>
-  </listener>
+  </listener> -->
 
   <servlet>
     <servlet-name>RegisterServlet</servlet-name>
@@ -51,7 +51,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-name>UnregisterServlet</servlet-name>
     <url-pattern>/unregister</url-pattern>
   </servlet-mapping>
-
+ <!-- 
   <servlet>
     <servlet-name>SendAllMessagesServlet</servlet-name>
     <servlet-class>
@@ -65,7 +65,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <url-pattern>/sendAll</url-pattern>
   </servlet-mapping>
 
-  <servlet>
+ <servlet>
     <servlet-name>SendMessageServlet</servlet-name>
     <servlet-class>
       com.principalmvl.lojackmykids.server.SendMessageServlet
@@ -76,7 +76,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <servlet-mapping>
     <servlet-name>SendMessageServlet</servlet-name>
     <url-pattern>/send</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> -->
  <servlet>
     <servlet-name>SendMessageHttpServlet</servlet-name>
     <servlet-class>
